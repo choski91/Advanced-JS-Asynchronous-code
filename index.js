@@ -28,16 +28,16 @@ function getAllImagesByBreed() {
 }
 
 //getAllImagesByBreed().then(breed =>console.log(breed));
- 
+
 //ejercicio 4
 function getAllImagesByBreed2(breed) {
 
     let link = "https://dog.ceo/api/breed/"
     let imagen = "/images"
-   return fetch (link + breed + imagen)
-   .then(res => res.json())
-   .then( datos => datos.message);
-}   
+    return fetch(link + breed + imagen)
+        .then(res => res.json())
+        .then(datos => datos.message);
+}
 
 //getAllImagesByBreed().then(datos=>console.log(datos));
 
@@ -45,9 +45,9 @@ function getAllImagesByBreed2(breed) {
 
 function getGitHubUserProfile(username) {
 
-    return fetch (`https://api.github.com/users/${username}`)
-    .then(res => res.json())
-    .then(perfil => perfil);
+    return fetch(`https://api.github.com/users/${username}`)
+        .then(res => res.json())
+        .then(perfil => perfil);
 }
 
 //getGitHubUserProfile("choski91").then( perfil=>console.log(perfil));
@@ -57,14 +57,14 @@ function getGitHubUserProfile(username) {
 
 function printGithubUserProfile(username) {
 
-   return fetch(`https://api.github.com/users/${username}`)
-  .then(res => res.json())
-  .then(perfil=> {
-    let usuario = {
-      img : perfil.avatar_url,
-      name : perfil.name,
-    }; 
-    document.body.innerHTML += `
+    return fetch(`https://api.github.com/users/${username}`)
+        .then(res => res.json())
+        .then(perfil => {
+            let usuario = {
+                img: perfil.avatar_url,
+                name: perfil.name,
+            };
+            document.body.innerHTML += `
         <img src="${usuario.img}" alt="${usuario.name}">
                 <p>${usuario.name}</p>
                 `;
@@ -78,31 +78,49 @@ function printGithubUserProfile(username) {
 
 function getAndPrintGitHubUserProfile(username) {
     return fetch(`https://api.github.com/users/${username}`)
-     .then(res=> res.json())
-     .then(user => {
-         let container = `<section>
+        .then(res => res.json())
+        .then(user => {
+            let container = `<section>
                      <img src="${user.avatar_url}" alt="${user.name}">
                      <h1>${user.name}</h1>
                      <p>Public repos: ${user.public_repos}</p>
                      </section>`;
-         document.body.innerHTML += container;
-         return container
-      });
- }
+            document.body.innerHTML += container;
+            return container
+        });
+}
 
- //getAndPrintGitHubUserProfile("choski91").then( perfil => console.log(perfil));
+//getAndPrintGitHubUserProfile("choski91").then( perfil => console.log(perfil));
 
-//ejercicio 8
+//ejercicio 8//Promesas
 
- document.getElementById("git-usuario").addEventListener("submit", function (event) {
-  event.preventDefault()
+document.getElementById("git-usuario").addEventListener("submit", function (event) {
+    event.preventDefault()
 
-  const usuario = event.target.profile.value;
-  console.log("choski91")
+    const usuario = event.target.profile.value;
+    console.log("choski91")
 
- //getAndPrintGitHubUserProfile(usuario).then( perfil => console.log(perfil));
- });
+    getAndPrintGitHubUserProfile(usuario).then(perfil => console.log(perfil));
+});
 
 
 
-//ejercicio 9
+//ejercicio 9// correccion de clase
+
+let userNames2 = ['NazaretMelquiades', 'choski91']
+function fetchGithubUsers(userNames) {
+    return Promise.all(userNames.map(users => {
+        return fetch(`https://api.github.com/users/${users}`)
+            .then(res => res.json())
+    })
+    ).then(userData => userData)
+    //   const userUrl= userData.repos_ur;
+    //   const userName= UserData.name;
+}
+fetchGithubUsers(userNames2).then(userData => {
+    for (let user of userData) {
+        console.log(user.repos_url);
+        console.log(user.name);
+        console.log(user.login);
+    }
+});
